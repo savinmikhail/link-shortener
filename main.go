@@ -28,16 +28,14 @@ func shorten(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//get short url
-	hash := md5.Sum([]byte(url))
-	stringHash := hex.EncodeToString(hash[:])
-	shortUrl := stringHash[:8]
+	shortCode := getShortCodeForUrl(url)
 	//write to the file
 	mappedUrls, err := getMappedUrls()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	mappedUrls[shortUrl] = url
+	mappedUrls[shortCode] = url
 	err = saveMappedUrls(mappedUrls)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -45,7 +43,13 @@ func shorten(w http.ResponseWriter, r *http.Request) {
 	}
 	//respond
 	fmt.Fprintf(w, "saved %v", url)
-	fmt.Fprintf(w, "\n short code: http://localhost:8079/%v", shortUrl)
+	fmt.Fprintf(w, "\n short code: http://localhost:8079/%v", shortCode)
+}
+
+func getShortCodeForUrl(url string) string {
+	hash := md5.Sum([]byte(url))
+	stringHash := hex.EncodeToString(hash[:])
+	return stringHash[:8]
 }
 
 func saveMappedUrls(mappedUrls map[string]string) error {
