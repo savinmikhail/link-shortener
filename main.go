@@ -10,13 +10,13 @@ import (
 )
 import "encoding/json"
 
-type RequestData struct {
+type ShortenRequestData struct {
 	URL string `json:"url"`
 }
 
 func shorten(w http.ResponseWriter, r *http.Request) {
 	// get orig url
-	var data RequestData
+	var data ShortenRequestData
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
