@@ -81,7 +81,11 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 	shortCode := r.URL.Path[1:]
 	origUrl, err := getOrigUrlByShortCode(shortCode)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+
+		jsonResp := map[string]string{"error": err.Error()}
+		json.NewEncoder(w).Encode(jsonResp)
 		return
 	}
 	http.Redirect(w, r, origUrl, http.StatusFound)
