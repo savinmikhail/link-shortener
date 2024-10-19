@@ -14,6 +14,11 @@ type ShortenRequestData struct {
 	URL string `json:"url"`
 }
 
+type ShortenResponseData struct {
+	OriginalUrl  string `json:"originalUrl"`
+	ShortenedUrl string `json:"shortenedUrl"`
+}
+
 func shorten(w http.ResponseWriter, r *http.Request) {
 	// get orig url
 	var data ShortenRequestData
@@ -42,8 +47,15 @@ func shorten(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//respond
-	fmt.Fprintf(w, "saved %v", url)
-	fmt.Fprintf(w, "\n short code: http://localhost:8079/%v", shortCode)
+	resp := ShortenResponseData{url, shortCode}
+	jsonResp, err := json.Marshal(resp)
+	if err != nil {
+		log.Fatalf("Error happened in JSON marshal. Err: %s", err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	w.Write(jsonResp)
+	return
 }
 
 func getShortCodeForUrl(url string) string {
