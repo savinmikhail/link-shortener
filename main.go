@@ -10,5 +10,5 @@ func main() {
 	http.HandleFunc("/shorten", controllers.Shorten)
 	http.HandleFunc("/", controllers.Redirect)
 
-	log.Fatal(http.ListenAndServe(":8079", nil))
+	log.Fatal(http.ListenAndServe(":3000", nil))
 }
