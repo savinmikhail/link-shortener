@@ -1,11 +1,10 @@
 package initializers
 
 import (
-	"log"
-	"os"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"log"
+	"os"
 )
 
 var DB *gorm.DB
