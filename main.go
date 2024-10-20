@@ -1,14 +1,15 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/savinmikhail/link-shortener/controllers"
-	"log"
-	"net/http"
 )
 
 func main() {
-	http.HandleFunc("/shorten", controllers.Shorten)
-	http.HandleFunc("/", controllers.Redirect)
+	r := gin.Default()
 
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	r.POST("/shorten", controllers.Shorten)
+	r.GET("/:shortCode", controllers.Redirect)
+
+	r.Run(":8080")
 }
