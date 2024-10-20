@@ -1,0 +1,16 @@
+version: '3'
+
+tasks:
+  up:
+    cmds:
+      - 'docker compose up --detach --remove-orphans {{.CLI_ARGS}}'
+
+  down: 'docker compose down --remove-orphans {{.CLI_ARGS}}'
+
+  rebuild:
+    cmds:
+      - task: down
+      - 'docker compose build'
+      - task: up
+
+  compile: 'docker composer exec app go run .'
