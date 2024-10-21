@@ -13,4 +13,4 @@ tasks:
       - 'docker compose build'
       - task: up
 
-  compile: 'docker composer exec app go run .'
+  lint: 'docker compose exec app golangci-lint run ./...'
