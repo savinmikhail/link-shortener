@@ -21,7 +21,7 @@ services:
     environment:
       POSTGRES_USER: dbuser
       POSTGRES_PASSWORD: dbpassword
-      POSTGRES_DB: go_crud
+      POSTGRES_DB: link_shortener
       DATABASE_PORT: 5432
     volumes:
       - pg_data:/var/lib/postgresql/data
