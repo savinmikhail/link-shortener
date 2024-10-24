@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: ./.docker/Dockerfile
     container_name: go_web
+    env_file:
+      - .env
     volumes:
       - .:/app
     ports:
