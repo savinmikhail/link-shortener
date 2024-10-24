@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/savinmikhail/link-shortener/models"
-	"github.com/savinmikhail/link-shortener/repository"
+	repository2 "github.com/savinmikhail/link-shortener/repository"
 	"net/http"
 )
 
@@ -17,10 +17,16 @@ type ShortenResponseData struct {
 	ShortenedUrl string `json:"shortenedUrl"`
 }
 
+var repository repository2.ShortLinkRepository
+
 func Shorten(c *gin.Context) {
 	// get orig url
 	var data ShortenRequestData
 	err := c.BindJSON(&data)
+	if err != nil {
+		c.Error(err)
+		return
+	}
 	url := data.URL
 	if url == "" {
 		c.Error(errors.New("url is empty"))
