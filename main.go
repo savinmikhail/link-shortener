@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/savinmikhail/link-shortener/controllers"
+	"log"
 )
 
 func main() {
@@ -11,5 +12,9 @@ func main() {
 	r.POST("/shorten", controllers.Shorten)
 	r.GET("/:shortCode", controllers.Redirect)
 
-	r.Run(":8080")
+	err := r.Run(":8080")
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 }
