@@ -14,3 +14,9 @@ tasks:
       - task: up
 
   lint: 'docker compose exec app golangci-lint run ./...'
+
+  make-m: 'docker compose exec app migrate create -ext sql -dir db/migrations -seq create_users_table'
+
+  migrate-m: 'docker compose exec app migrate -database $POSTGRESQL_URL -path db/migrations up'
+
+
