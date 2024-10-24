@@ -1,6 +1,11 @@
 version: '3'
 
+vars:
+  GO: '{{if not .LOCALLY}}docker compose exec -it app{{end}}'
+
 tasks:
+  go: '{{.GO}} sh'
+
   up:
     cmds:
       - 'docker compose up --detach --remove-orphans {{.CLI_ARGS}}'
@@ -13,10 +18,10 @@ tasks:
       - 'docker compose build'
       - task: up
 
-  lint: 'docker compose exec app golangci-lint run ./...'
+  lint: '{{.GO}} golangci-lint run ./...'
 
-  make-m: 'docker compose exec app migrate create -ext sql -dir db/migrations -seq create_users_table'
-
-  migrate-m: 'docker compose exec app migrate -database $POSTGRESQL_URL -path db/migrations up'
+  make-m: '{{.GO}} migrate create -ext sql -dir db/migrations -seq create_users_table'
+  m-up: '{{.GO}} migrate -database $POSTGRESQL_URL -path db/migrations up'
+  m-down: '{{.GO}} migrate -database $POSTGRESQL_URL -path db/migrations down'
 
 
