@@ -6,7 +6,11 @@ import (
 	"os"
 )
 
-func SaveMappedUrls(mappedUrls map[string]string) error {
+type JsonRepository struct {
+	filePath string
+}
+
+func (repo *JsonRepository) SaveMappedUrls(mappedUrls map[string]string) error {
 	jsonContent, err := json.Marshal(mappedUrls)
 	if err != nil {
 		return err
@@ -19,8 +23,8 @@ func SaveMappedUrls(mappedUrls map[string]string) error {
 	return nil
 }
 
-func GetOrigUrlByShortCode(shortCode string) (string, error) {
-	mappedUrls, err := GetMappedUrls()
+func (repo *JsonRepository) GetOrigUrlByShortCode(shortCode string) (string, error) {
+	mappedUrls, err := repo.GetMappedUrls()
 	if err != nil {
 		return "", err
 	}
@@ -31,7 +35,7 @@ func GetOrigUrlByShortCode(shortCode string) (string, error) {
 	return origUrl, nil
 }
 
-func GetMappedUrls() (map[string]string, error) {
+func (repo *JsonRepository) GetMappedUrls() (map[string]string, error) {
 	fileContent, err := os.ReadFile("list.json")
 	if err != nil {
 		return nil, err
