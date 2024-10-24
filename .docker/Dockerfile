@@ -16,5 +16,12 @@ RUN go install github.com/githubnemo/CompileDaemon@latest
 # binary will be $(go env GOPATH)/bin/golangci-lint
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.61.0
 
+#install migration tools and Postgres driver
+RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+RUN go get -u github.com/golang-migrate/migrate/v4/database/postgres \
+    && go get github.com/lib/pq \
+    && go get github.com/golang-migrate/migrate/v4/source/file
+
 # Command to run the executable with CompileDaemon
 ENTRYPOINT ["/go/bin/CompileDaemon", "--build=go build -o binary .", "--command=./binary"]
